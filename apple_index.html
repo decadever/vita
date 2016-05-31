@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        div img{
+            width: 64px;
+        }
+    </style>
+    <script>
+        window.onload = function(){
+            var oDiv = document.getElementById("div1");
+            var aImg = oDiv.getElementsByTagName("img");
+
+            document.onmousemove = function(ev){
+                var oEvent = ev || event;
+                var x1 = oEvent.clientX;
+                var y1 = oEvent.clientY;
+
+                for (var i = 0; i < aImg.length; i++){
+                    x2 = aImg[i].offsetLeft;
+                    y2 = aImg[i].offsetTop + oDiv.offsetTop;
+
+                    var x = x1 - x2;
+                    var y = y1 - y2;
+                    var dis = Math.sqrt(x*x + y*y);
+
+                    var scale = 1 - dis / 1200;
+                    if (scale < 0.5) scale = 0.5;
+                    aImg[i].style.width = scale*128 + "px";
+
+                    console.log(dis.toFixed(2));
+                }
+            };
+        }
+
+    </script>
+</head>
+<body>
+<div id="div1">
+    <img src="images/2.png">
+    <img src="images/3.png">
+    <img src="images/4.png">
+    <img src="images/5.png">
+</div>
+</body>
+</html>

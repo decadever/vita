@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul li {
+            float: left;
+            width: 14%;
+            height: 200px;
+            border: 1px solid #000;
+        }
+    </style>
+    <style>
+        *{margin:0;padding:0;list-style:none;}
+        li{float:left;width:14%; height:200px; border:1px solid #000;}
+    </style>
+    <script>
+        window.onload = function(){
+            var aLi = document.querySelectorAll("li");
+
+            for(let i = 0; i < aLi.length; i++){
+                aLi.item(i).onclick = function(){
+                    var oA = new Audio();
+                    oA.src = "mp3/"+(i+1)+".mp3";
+                    oA.play();
+                };
+            }
+        };
+    </script>
+</head>
+
+<body>
+
+<div>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+    </ul>
+</div>
+
+
+</body>
+</html>

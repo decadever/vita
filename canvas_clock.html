@@ -1,0 +1,80 @@
+<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas时钟</title>
+    <style>
+        body {
+            background: #333;
+            text-align: center;
+            background: url("images/bg_clock.jpg");
+        }
+
+        #c1 {
+            background: rgba(0,0,0,0.5);
+            margin-top: 40px
+        }
+    </style>
+    <script>
+        function d2a(n) {
+            return n * Math.PI / 180;
+        }
+        window.onload = function () {
+            var oC = document.getElementById("c1");
+
+            //1 获取绘图接口
+            var gd = oC.getContext("2d");
+
+            var cx = 400;
+            var cy = 300;
+            var r = 200;
+
+            var h = 60;
+            gd.font = h + "px kaiti";
+
+            setInterval(function () {
+                gd.clearRect(0, 0, oC.width, oC.height);
+                var oDate = new Date();
+                var iH = addZero(oDate.getHours());
+                var iM = addZero(oDate.getMinutes());
+                var iS = addZero(oDate.getSeconds());
+                var iMs = oDate.getMilliseconds();
+
+                drawArc(cx, cy, r, 0, (iH - 12) * 30 + iM / 60 * 30, "blue");
+                drawArc(cx, cy, r + 20, 0, iM * 6 + iS / 60 * 6, "green");
+                drawArc(cx, cy, r + 40, 0, iS * 6 + iMs / 1000 * 6, "pink");
+
+
+                var arr = [iH, iM, iS];
+                var str = arr.join(":");
+                console.log(str);
+                var w = gd.measureText(str).width;
+                gd.fillStyle = "#fff"
+                gd.fillText(str, cx - w / 2, cy + h / 2);
+            }, 30);
+
+
+            function drawArc(cx, cy, r, start, end, color) {
+                start -= 90;
+                end -= 90;
+                gd.beginPath();
+                gd.arc(cx, cy, r, d2a(start), d2a(end));
+                gd.strokeStyle = color;
+                gd.lineWidth = "20";
+                gd.stroke();
+            }
+
+            function addZero(n) {
+                return n < 10 ? "0" + n : "" + n;
+            }
+
+
+        };
+    </script>
+</head>
+
+<body>
+<canvas id="c1" width="800" height="600"></canvas>
+</body>
+</html>
