@@ -112,7 +112,7 @@ window.onload = function () {
 
                     break;
             }
-            move(oSpan, {left: 0, top: 0});
+            myMove(oSpan, {left: 0, top: 0});
 
         };
         oDiv.onmouseleave = function (ev) {
@@ -123,16 +123,16 @@ window.onload = function () {
 
             switch (n) {
                 case 0://左
-                    move(oSpan, {left: -280, top: 200});
+                    myMove(oSpan, {left: -280, top: 200});
                     break;
                 case 1://下
-                    move(oSpan, {left: 0, top: 280});
+                    myMove(oSpan, {left: 0, top: 280});
                     break;
                 case 2://右
-                    move(oSpan, {left: 280, top: 200});
+                    myMove(oSpan, {left: 280, top: 200});
                     break;
                 case 3://上
-                    move(oSpan, {left: 0, top: -280});
+                    myMove(oSpan, {left: 0, top: -280});
                     break;
             }
         };
