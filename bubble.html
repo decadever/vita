@@ -1,112 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-	<style>
-*{ margin:0; padding:0; list-style:none; font-family: "微软雅黑"}
-.box{width:100px;height:100px;background:red; position:absolute;left:0;top:0; border-radius:50%;}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-family: "微软雅黑"
+        }
+
+        body {
+            background: #000000;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 50%;
+        }
 
 
-</style>
-<script>
-window.onload=function(){
+    </style>
+    <script>
+        window.onload = function () {
 
-	//在5秒内，随机创建10个盒子，并运动起来，同时可以拖拽+甩
-	for(var i=0;i<100;i++){
-		setTimeout(createDiv,Math.random()*60000);
-	}
-	function createDiv(){
-		//创建1个盒子	,drag()	+ move()
-		var oDiv=document.createElement('div');
-		oDiv.className='box';
-		var r=rnd(0,256);
-		var g=rnd(0,256);
-		var b=rnd(0,256);
-		oDiv.style.background='rgb('+r+','+g+','+b+')';
-		document.body.appendChild(oDiv);
-		drag(oDiv);
-		
-		var speedX=rnd(1,30);//设置初始速度
-		var speedY=rnd(1,30);
-		
-		move(oDiv,speedX,speedY);
-	}
-	function rnd(n,m){return parseInt(n+Math.random()*(m-n))}
-	//拖拽
-	function drag(obj){
-		obj.onmousedown=function(ev){
-			clearInterval(obj.timer);
-			var speedX=0,speedY=0;	//要求的速度
-			var lastX=0,lastY=0;	//最后一次的距离
-			
-			var oEvt=ev||event;
-			var disX=oEvt.clientX-obj.offsetLeft;
-			var disY=oEvt.clientY-obj.offsetTop;	
-			document.onmousemove=function(ev){
-				var oEvt=ev||event;
-				obj.style.left=oEvt.clientX-disX+'px';
-				obj.style.top=oEvt.clientY-disY+'px';	
-				//求速度
-				speedX = obj.offsetLeft-lastX;
-				speedY = obj.offsetTop-lastY;
-				
-				lastX=obj.offsetLeft;
-				lastY=obj.offsetTop
-			};
-			document.onmouseup=function(){
-				document.onmousemove=document.onmouseup=null;
-				//alert(speedX+'|'+speedY);
-				move(obj,speedX,speedY);//移动
-			};
-			
-			return false;
-		};	
-	}
-	//碰撞
-	function move(obj,speedX,speedY){
-		clearInterval(obj.timer);
-		obj.timer=setInterval(function(){
-			
-			speedY+=3;//重力
-			
-			var l=obj.offsetLeft+speedX;//计算
-			var t=obj.offsetTop+speedY;
-			
-			//限定+反向+摩擦
-			if(l>document.documentElement.clientWidth-obj.offsetWidth){
-				l=document.documentElement.clientWidth-obj.offsetWidth;
-				speedX *= -0.8;
-				speedY *= 0.8;	
-			}else if(l<0){
-				l=0;
-				speedX *= -0.8;
-				speedY *= 0.8;	
-			}
-			if(t>document.documentElement.clientHeight-obj.offsetHeight){
-				t=document.documentElement.clientHeight-obj.offsetHeight;
-				speedY *= -0.8;
-				speedX *= 0.8;	
-			}else if(t<0){
-				t=0;
-				speedY *= -0.8;
-				speedX *= 0.8;	
-			}
-			
-			obj.style.left=l+'px';//使用
-			obj.style.top=t+'px';
-			
-			if(Math.abs(speedX)<1) speedX=0;//停止条件
-			if(Math.abs(speedY)<1) speedY=0;
-			if(speedX==0&&speedY==0&&t==document.documentElement.clientHeight-obj.offsetHeight){
-				clearInterval(obj.timer);
-				document.body.removeChild(obj);
-			}
-			console.log(speedX,speedY);
-		},30);	
-	}
-};
-</script>
+            //在5秒内，随机创建10个盒子，并运动起来，同时可以拖拽+甩
+            for (var i = 0; i < 100; i++) {
+                setTimeout(createDiv, Math.random() * 60000);
+            }
+            function createDiv() {
+                //创建1个盒子	,drag()	+ move()
+                var oDiv = document.createElement('div');
+                oDiv.className = 'box';
+                var r = rnd(0, 256);
+                var g = rnd(0, 256);
+                var b = rnd(0, 256);
+                var a = rnd(0, 256);
+                oDiv.style.background = 'rgba(' + r + ',' + g + ',' + b + ',' + a +')';
+                document.body.appendChild(oDiv);
+                drag(oDiv);
+
+                var speedX = rnd(1, 30);//设置初始速度
+                var speedY = rnd(1, 30);
+
+                move(oDiv, speedX, speedY);
+            }
+
+            function rnd(n, m) {
+                return parseInt(n + Math.random() * (m - n))
+            }
+
+            //拖拽
+            function drag(obj) {
+                obj.onmousedown = function (ev) {
+                    clearInterval(obj.timer);
+                    var speedX = 0, speedY = 0;	//要求的速度
+                    var lastX = 0, lastY = 0;	//最后一次的距离
+
+                    var oEvt = ev || event;
+                    var disX = oEvt.clientX - obj.offsetLeft;
+                    var disY = oEvt.clientY - obj.offsetTop;
+                    document.onmousemove = function (ev) {
+                        var oEvt = ev || event;
+                        obj.style.left = oEvt.clientX - disX + 'px';
+                        obj.style.top = oEvt.clientY - disY + 'px';
+                        //求速度
+                        speedX = obj.offsetLeft - lastX;
+                        speedY = obj.offsetTop - lastY;
+
+                        lastX = obj.offsetLeft;
+                        lastY = obj.offsetTop
+                    };
+                    document.onmouseup = function () {
+                        document.onmousemove = document.onmouseup = null;
+                        //alert(speedX+'|'+speedY);
+                        move(obj, speedX, speedY);//移动
+                    };
+
+                    return false;
+                };
+            }
+
+            //碰撞
+            function move(obj, speedX, speedY) {
+                clearInterval(obj.timer);
+                obj.timer = setInterval(function () {
+
+                    speedY += 3;//重力
+
+                    var l = obj.offsetLeft + speedX;//计算
+                    var t = obj.offsetTop + speedY;
+
+                    //限定+反向+摩擦
+                    if (l > document.documentElement.clientWidth - obj.offsetWidth) {
+                        l = document.documentElement.clientWidth - obj.offsetWidth;
+                        speedX *= -0.8;
+                        speedY *= 0.8;
+                    } else if (l < 0) {
+                        l = 0;
+                        speedX *= -0.8;
+                        speedY *= 0.8;
+                    }
+                    if (t > document.documentElement.clientHeight - obj.offsetHeight) {
+                        t = document.documentElement.clientHeight - obj.offsetHeight;
+                        speedY *= -0.8;
+                        speedX *= 0.8;
+                    } else if (t < 0) {
+                        t = 0;
+                        speedY *= -0.8;
+                        speedX *= 0.8;
+                    }
+
+                    obj.style.left = l + 'px';//使用
+                    obj.style.top = t + 'px';
+
+                    if (Math.abs(speedX) < 1) speedX = 0;//停止条件
+                    if (Math.abs(speedY) < 1) speedY = 0;
+                    if (speedX == 0 && speedY == 0 && t == document.documentElement.clientHeight - obj.offsetHeight) {
+                        clearInterval(obj.timer);
+                        document.body.removeChild(obj);
+                    }
+                    console.log(speedX, speedY);
+                }, 30);
+            }
+        };
+    </script>
 </head>
 
 <body>

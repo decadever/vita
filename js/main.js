@@ -16,6 +16,7 @@ window.onload = function () {
     var len = aNavLi.length;
     var oMoveLi = aNavLi[len - 1];
     var iNow = 0;
+
     for (var i = 0; i < len - 1; i++) {
         (function(index){
             aNavLi[i].onmouseover = function () {
@@ -44,22 +45,21 @@ window.onload = function () {
         return obj.getBoundingClientRect();
     }
 
-
-    //for (var i = 0; i < len-1; i++) {
-    //    (function(index){
-    //        aNavLi[i].onclick = function () {
-    //            var oBannerBoxT = getScrollPos(oBannerBox).top;
-    //            var oSkillBoxT = getScrollPos(oSkillBox).top;
-    //            var oWorksBoxT = getScrollPos(oWorksBox).top;
-    //            var oContactBoxT = getScrollPos(oContactBox).top;
-    //            var arr = [0,oSkillBoxT,oWorksBoxT,oContactBoxT];
-    //            moveScroll(arr[index+1],500);
-    //            console.log(arr[index]+1,index);
-    //        }
-    //    })(i);
-    //
-    //
-    //}
+    var arrPos = [];
+    var docScrollT = document.documentElement.scrollTop || document.body.scrollTop;
+    var oBannerBoxT = getScrollPos(oBannerBox).top;
+    var oSkillBoxT = getScrollPos(oSkillBox).top-60;
+    var oWorksBoxT = getScrollPos(oWorksBox).top-60;
+    var oContactBoxT = getScrollPos(oContactBox).top-60;
+    arrPos = [0,oSkillBoxT,oWorksBoxT,oContactBoxT];
+    for (var i = 0; i < len-1; i++) {
+        (function(index){
+            aNavLi[i].onclick = function () {
+                moveScroll(arrPos[index],500);
+                console.log(arrPos[index],index);
+            }
+        })(i);
+    }
 
 
 
@@ -92,6 +92,11 @@ window.onload = function () {
 
             var n = getDir(this, oEvent);
             var oSpan = this.children[0];
+            oSpan.onclick = function(){
+                var oNext = this.nextSibling || this.nextElementSibling;
+                oNext.click();
+
+            };
 
             switch (n) {
                 case 0://左
@@ -186,7 +191,7 @@ window.onload = function () {
     var timer = null;
 
 
-    document.onmousedown = function (ev) {
+    oSkillBox.onmousedown = function (ev) {
 
         var disX = ev.clientX - y;
         var disY = ev.clientY - x;
@@ -256,8 +261,9 @@ window.onload = function () {
         var count = Math.round(time/30);
 
         var n = 0;
-        clearInterval(document.timer);
-        document.timer = setInterval(function(){
+        var timer = null;
+        clearInterval(timer);
+        timer = setInterval(function(){
             n++;
             var a = 1 - n/count;
             var cur = start + dis*(1 - a*a*a);

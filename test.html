@@ -1,51 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="author" content="智能社 - zhinengshe.com" />
+    <meta name="copyright" content="智能社 - zhinengshe.com" />
+    <title>智能社 - www.zhinengshe.com</title>
     <style>
-        *{
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        .cur{
-            position: absolute;
-            left: 200px;
-            top: 100px;
-            width: 200px;
-            height: 60px;
-            transition: 1s all ease;
-            transform-style: preserve-3d;
-            transform: rotateX(0deg);
+        #div1{ position:relative;width:300px; height:300px; border:1px solid #000; border-radius:50%; box-shadow:1px 2px 2px #000;}
+        #cap{ position:absolute;left:50%;top:50%;width:30px; height:30px;border-radius:50%; background:#000; margin:-15px;}
 
-        }
-        .cur span{
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .cur .front{
-            transform: translateZ(30px);
-            background: #0000BE;
-        }
+        #div1 div{transform-origin:center bottom;}
+        #hour{ position:absolute;left:50%;top:50%; margin-left:-5px; margin-top:-80px;width:10px; height:80px; background:#000;}
+        #min{ position:absolute;left:50%;top:50%; margin-left:-4px; margin-top:-100px;width:8px; height:100px; background:#000;}
+        #sec{ position:absolute;left:50%;top:50%; margin-left:-1px; margin-top:-120px;width:2px; height:120px; background:red;}
 
-        .cur .bottom{
-            transform: rotateX(-90deg) translateZ(30px);
-            background: #0DFFFF;
-        }
-
-        .cur:hover{
-            transform: rotateX(90deg);
-        }
+        #div1 span{ position:absolute;left:50%;top:0; margin-left:-1px;width:2px; height:8px; background:#000; transform-origin:center 150px;}
+        #div1 span.on{ margin-left:-2px;width:4px; height:12px;}
+        #div1 span strong{ position:absolute;left:50%;top:10px; margin-left:-20px; text-align:center;width:40px;  font-weight:normal;}
     </style>
+    <script>
+        window.onload = function() {
+            var oDiv = document.getElementById("div1");
+            var oH = document.getElementById("hour");
+            var oM = document.getElementById("min");
+            var oS = document.getElementById("sec");
+
+            setInterval(clock, 30);
+            function clock() {
+                var oDate = new Date();
+                var iH = oDate.getHours();
+                var iM = oDate.getMinutes();
+                var iS = oDate.getSeconds();
+                var iMs = oDate.getMilliseconds();
+
+
+                oH.style.transform = "rotate(" + (iH * 30 + iM / 60 * 30) + "deg)";
+                oM.style.transform = "rotate(" + (iM * 6 + iS / 60 * 6) + "deg)";
+                oS.style.transform = "rotate(" + (iS * 6 + i / 1000 * 6) + "deg)";
+            }
+
+            //创建span
+            for (var i = 0; i < 60; i++) {
+                var oSpan = document.createElement("span");
+
+                oDiv.appendChild(oSpan);
+                if (i % 5 == 0) {
+                    oSpan.classList.add("on");
+                    oSpan.innerHTML = "<strong>" + (i == 0 ? 12 : i / 5) + "<\/strong>";
+                    oSpan.children[0].style.transform = "rotate(-" + i * 6 + "deg)"
+                }
+                oSpan.style.transform = "rotate(" + i * 6 + "deg)";
+            }
+
+            oDiv.onmousedown = function (ev) {
+                var oEvent = ev || event;
+                var disX = oEvent.clientX - oDiv.offsetLeft;
+                var disY = oEvent.clientY - oDiv.offsetTop;
+                document.onmousemove = function (ev) {
+                    var oEvent = ev || event;
+                    oDiv.style.left = oEvent.clientX - disX + "px";
+                    oDiv.style.top = oEvent.clientY - disY + "px";
+                };
+                document.onmouseup = function () {
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    oDiv.releaseCapture && oDiv.releaseCapture();
+                };
+                oDiv.setCapture && oDiv.setCapture();
+                return false;
+            };
+        };
+    </script>
 </head>
+
 <body>
-    <div class="cur">
-        <span class="front"></span>
-        <span class="bottom"></span>
-    </div>
+
+<div id="div1">
+    <div id="hour"></div>
+    <div id="min"></div>
+    <div id="sec"></div>
+    <div id="cap"></div>
+    <!--<span><strong>12</strong></span>-->
+
+</div>
+
 </body>
 </html>
