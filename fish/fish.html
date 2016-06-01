@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="智能社 - zhinengshe.com" />
+<meta name="copyright" content="智能社 - zhinengshe.com" />
+<title>智能社 - www.zhinengshe.com</title>
+<style>
+*{margin:0;padding:0;list-style:none;}
+body{background:#000; text-align:center;}
+#c1{background:url(img/game_bg_2_hd.jpg) no-repeat; margin-top: 60px}
+</style>
+<script src="js/utils.js"></script>
+<script src="js/sprite.js"></script>
+<script src="js/fish.js"></script>
+<script src="js/cannon.js"></script>
+<script src="js/bullet.js"></script>
+<script>
+window.onload = function(){
+	var oC = document.getElementById("c1");
+	var gd = oC.getContext("2d");
+	
+	loadImages({
+
+		fish1:   "img/fish1.png",
+		fish2:   "img/fish2.png",
+		fish3:   "img/fish3.png",
+		fish4:   "img/fish4.png",
+		fish5:   "img/fish5.png",
+		bottom:   "img/bottom.png",
+		bullet:   "img/bullet.png",
+		cannon1:   "img/cannon1.png",
+		cannon2:   "img/cannon2.png",
+		cannon3:   "img/cannon3.png",
+		cannon4:   "img/cannon4.png",
+		cannon5:   "img/cannon5.png",
+		cannon6:   "img/cannon6.png",
+		cannon7:   "img/cannon7.png"
+		
+	},function(imgs){
+		
+		//炮台
+		var bottom = new Sprite(imgs.bottom);
+		bottom.w = 765;
+		bottom.h = 70;
+		bottom.x = oC.width/2;
+		bottom.y = oC.height-bottom.h/2;
+		
+		//炮塔
+		var cannon = new Cannon(imgs,7);
+		cannon.x = 444;
+		cannon.y = 565;
+		
+		//移动炮塔
+		oC.onmousemove = function(ev){
+			
+			var x = ev.clientX - cannon.x - oC.offsetLeft;
+			var y = cannon.y + oC.offsetTop - ev.clientY;
+			 
+			cannon.rotate = 90 - a2d(Math.atan2(y,x));
+//			oC.onclick();
+		};
+		
+		//炮
+		var b = new Bullet(imgs,7);
+		b.x = 444;
+		b.y = 565;
+		
+		var aBullet = [];
+		oC.onclick = function(){
+			for(var i = -5; i < 5; i++){
+				var b = new Bullet(imgs,7);
+				b.x = 444;
+				b.y = 565;
+				b.speed = 5;
+				b.rotate = cannon.rotate + i*5;
+			}
+			aBullet.push(b);
+
+		};
+		
+		//生成鱼
+		var aFish = [];
+		setInterval(function(){
+			//鱼
+			var f = new Fish(imgs,rnd(1,6)); 
+			
+			if(Math.random() < 0.5){
+				f.x = -100;
+			} else {
+				f.x = oC.width+50;
+				f.rotate = -90;
+			}
+			
+			f.y = rnd(0,oC.height); 
+			aFish.push(f);
+		},300);
+		
+		setInterval(function(){
+			gd.clearRect(0,0,oC.width,oC.height);
+			//画鱼
+			for(var i = 0; i < aFish.length; i++){
+				aFish[i].draw(gd);
+				aFish[i].move();
+			}
+			//炮台
+			bottom.draw(gd);
+			
+			//炮塔
+			cannon.draw(gd);
+			
+			//炮弹
+			for(var i = 0; i < aBullet.length; i++){
+				aBullet[i].draw(gd);
+				aBullet[i].move();
+			}
+
+			//碰撞检测
+			for(var i = 0; i < aBullet.length; i++){
+				for(var j = 0; j < aFish.length; j++){
+					if(aBullet[i].collTest(aFish[j])){
+						aFish.splice(j--,1);
+						aBullet.splice(i--,1);
+						break;
+					}
+				}
+			}
+			//释放资源
+			for(var i = 0; i < aBullet.length; i++){
+				if(aBullet[i].x < -150 || aBullet[i].x > oC.width + 150 || aBullet[i].y < -150 || aBullet[i].y > oC.height + 150){
+					aBullet.splice(i--,1);
+				}	
+			}
+			for(var i = 0; i < aFish.length; i++){
+				if(aFish[i].x < -150 || aFish[i].x > oC.width + 150 || aFish[i].y < -150 || aFish[i].y > oC.height + 150){
+					aFish.splice(i--,1);
+				}	
+			}
+			document.title = aBullet.length+"|"+aFish.length;
+			
+		},30);
+		
+		
+	 });
+};
+</script>
+</head>
+
+<body>
+<canvas id="c1" width="800" height="600"></canvas>
+</body>
+</html>
