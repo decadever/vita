@@ -29,7 +29,6 @@
             var cx = 400;
             var cy = 300;
             var r = 200;
-
             var h = 60;
             gd.font = h + "px kaiti";
 
@@ -45,15 +44,13 @@
                 drawArc(cx, cy, r + 20, 0, iM * 6 + iS / 60 * 6, "green");
                 drawArc(cx, cy, r + 40, 0, iS * 6 + iMs / 1000 * 6, "pink");
 
-
                 var arr = [iH, iM, iS];
                 var str = arr.join(":");
                 console.log(str);
                 var w = gd.measureText(str).width;
-                gd.fillStyle = "#fff"
+                gd.fillStyle = "#fff";
                 gd.fillText(str, cx - w / 2, cy + h / 2);
             }, 30);
-
 
             function drawArc(cx, cy, r, start, end, color) {
                 start -= 90;
@@ -68,7 +65,6 @@
             function addZero(n) {
                 return n < 10 ? "0" + n : "" + n;
             }
-
 
         };
     </script>
